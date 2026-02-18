@@ -1,0 +1,25 @@
+<div class="w-full h-full bg-[#C0C0C0] flex flex-col text-black">
+  <!-- Toolbar -->
+  <div class="h-10 p-1 flex items-center border-b-2 border-gray-400 space-x-2">
+    <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-2 py-0.5 flex items-center">Back</button>
+    <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-2 py-0.5 flex items-center">Forward</button>
+    <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-2 py-0.5 flex items-center">Stop</button>
+    <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-2 py-0.5 flex items-center">Refresh</button>
+  </div>
+  
+  <!-- Address Bar -->
+  <div class="h-10 p-1 flex items-center border-b-2 border-gray-400">
+    <span class="mr-2">Address:</span>
+    <input 
+      type="text" 
+      class="win95-border-sunken bg-white flex-grow p-1 text-sm h-7 text-black" 
+      [value]="addressBarUrl()"
+      (keyup)="handleAddressBar($event)">
+    <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-4 py-0.5 flex items-center ml-2 h-7" (click)="navigateToUrl(addressBarUrl())">Go</button>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-grow win95-border-sunken bg-white m-1">
+    <iframe class="w-full h-full border-none" [src]="iframeSrc()"></iframe>
+  </div>
+</div>

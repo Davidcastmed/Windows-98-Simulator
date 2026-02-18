@@ -1,0 +1,10 @@
+
+/* This is a workaround for a common issue with custom pipes in standalone components. 
+   Angular sometimes needs an explicit CSS file, even if it's empty, for pipes to be recognized correctly.
+   For sanitizing HTML, a proper pipe would be defined, but for this applet environment, we'll keep it simple
+   and assume the SVG strings are safe. We'll use a simple binding for innerHTML.
+*/
+/* The pipe is not needed as we can bind directly to innerHTML.
+   To avoid security risks in a real app, DOMSanitizer should be used.
+   In this controlled environment, we can live without it for simplicity.
+*/

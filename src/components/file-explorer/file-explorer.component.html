@@ -1,0 +1,31 @@
+<div class="w-full h-full bg-[#C0C0C0] flex flex-col">
+  <!-- Toolbar -->
+  <div class="h-10 p-1 flex items-center border-b-2 border-gray-400">
+    <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-2 py-0.5 flex items-center mr-2" (click)="goUp()" [disabled]="currentPath().length <= 1">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clip-rule="evenodd" />
+      </svg>
+      Up
+    </button>
+    <div class="flex-grow flex items-center">
+      <span class="mr-2">Address:</span>
+      <div class="win95-border-sunken bg-white flex-grow p-1 text-sm h-7 flex items-center">
+        {{ addressPath() }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-grow win95-border-sunken bg-white m-1 p-1 overflow-y-auto">
+    <div class="grid grid-cols-4 gap-2">
+      @for(item of currentDirectoryContent(); track item.name) {
+        <div 
+          class="flex flex-col items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white"
+          (dblclick)="onDoubleClick(item)">
+          <div class="w-8 h-8 mb-1" [innerHTML]="getSafeIcon(item.type === 'directory' ? folderIcon : fileIcon)"></div>
+          <span class="text-center text-sm break-all">{{ item.name }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

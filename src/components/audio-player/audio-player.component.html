@@ -1,0 +1,51 @@
+<div class="w-full h-full bg-[#C0C0C0] p-1 flex flex-col text-black font-sans text-sm">
+  <audio #audioPlayer></audio>
+
+  <!-- Menu Bar (static) -->
+  <div class="flex border-b border-gray-500 mb-1">
+    <span class="px-2"><u>F</u>ile</span>
+    <span class="px-2"><u>V</u>iew</span>
+    <span class="px-2"><u>P</u>lay</span>
+    <span class="px-2"><u>H</u>elp</span>
+  </div>
+
+  <!-- Display -->
+  <div class="win95-border-sunken bg-black text-green-400 p-2 my-1 font-mono">
+    <p class="truncate">{{ currentTrack().title }} - {{ currentTrack().artist }}</p>
+  </div>
+
+  <!-- Seek Bar -->
+  <div class="relative h-6 my-1 px-1">
+    <input type="range" class="w-full h-1 appearance-none bg-gray-500 outline-none absolute top-2" 
+           min="0" [max]="duration()" [value]="currentTime()" (input)="seek($event)">
+    <div class="absolute top-4 left-0 text-xs">{{ formatTime(currentTime()) }}</div>
+    <div class="absolute top-4 right-0 text-xs">{{ formatTime(duration()) }}</div>
+  </div>
+
+  <!-- Controls -->
+  <div class="flex items-center space-x-1 my-1">
+    <button class="win95-border w-8 h-8 flex items-center justify-center" (click)="togglePlayPause()">{{ isPlaying() ? '||' : '|>' }}</button>
+    <button class="win95-border w-8 h-8 flex items-center justify-center" (click)="stop()">[]</button>
+    <div class="flex-grow"></div>
+    <button class="win95-border w-8 h-8 flex items-center justify-center" (click)="prevTrack()">{{ '|<' }}</button>
+    <button class="win95-border w-8 h-8 flex items-center justify-center" (click)="nextTrack()">{{ '>|' }}</button>
+    <div class="flex-grow"></div>
+    <label class="text-xs">Volume</label>
+    <input type="range" class="w-20" min="0" max="1" step="0.01" [value]="volume()" (input)="setVolume($event)">
+  </div>
+
+  <!-- Playlist -->
+  <div class="flex-grow win95-border-sunken bg-white p-1 overflow-y-auto mt-1">
+    <ul>
+      @for(track of playlist; track track.url; let i = $index) {
+        <li 
+          class="p-1 cursor-pointer truncate"
+          [class.bg-blue-800]="i === currentTrackIndex()"
+          [class.text-white]="i === currentTrackIndex()"
+          (click)="playTrack(i)">
+          {{ i + 1 }}. {{ track.title }}
+        </li>
+      }
+    </ul>
+  </div>
+</div>

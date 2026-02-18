@@ -1,0 +1,5 @@
+{
+  "name": "Windows 98 Simulator",
+  "description": "A web-based simulator of the Windows 98 operating system, complete with a functional desktop, start menu, taskbar, and classic applications like Notepad and Minesweeper. Experience the nostalgia of the 90s right in your browser.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,106 @@
+<div class="w-full h-screen bg-[#008080] flex flex-col select-none" (click)="closeStartMenu()">
+  <!-- Desktop Area -->
+  <main class="flex-grow p-2 flex flex-col flex-wrap content-start">
+    @for(icon of desktopIcons(); track icon.id) {
+      <div class="text-white text-center w-24 p-2 cursor-pointer hover:bg-blue-800/50 rounded" (dblclick)="openWindow(icon.id)">
+        <div class="w-12 h-12 mx-auto" [innerHTML]="getSafeIconHtml(icon.icon)"></div>
+        <p class="mt-1 text-sm [text-shadow:1px_1px_2px_#000000]">{{ icon.name }}</p>
+      </div>
+    }
+  </main>
+
+  <!-- Open Windows -->
+  @for(win of openWindows(); track win.id) {
+    @if (!win.minimized) {
+      <app-window 
+        [config]="win" 
+        (windowClose)="closeWindow(win.id)"
+        (windowFocus)="focusWindow(win.id)"
+        (windowMinimize)="minimizeWindow(win.id)">
+        <div class="w-full h-full">
+          @switch(win.component) {
+            @case('notepad') {
+              <app-notepad></app-notepad>
+            }
+            @case('my-computer') {
+              <app-my-computer (openApp)="openWindow($event)"></app-my-computer>
+            }
+            @case('file-explorer') {
+              <app-file-explorer (openApp)="openWindow($event)"></app-file-explorer>
+            }
+            @case('minesweeper') {
+              <app-minesweeper></app-minesweeper>
+            }
+            @case('audio-player') {
+              <app-audio-player></app-audio-player>
+            }
+            @case('internet-explorer') {
+              <app-internet-explorer></app-internet-explorer>
+            }
+          }
+        </div>
+      </app-window>
+    }
+  }
+  
+  <!-- Taskbar -->
+  <footer class="h-10 bg-[#C0C0C0] win95-border flex items-center px-1 z-50">
+    <!-- Start Button -->
+    <div class="relative">
+      <button class="win95-border bg-[#C0C0C0] hover:bg-gray-300 px-2 py-0.5 flex items-center" (click)="$event.stopPropagation(); toggleStartMenu()">
+        <img src="https://win98icons.alexmeub.com/icons/png/windows_flag-0.png" alt="start" class="w-5 h-5 mr-2">
+        <span class="font-bold text-lg">Start</span>
+      </button>
+
+      <!-- Start Menu -->
+      @if (startMenuOpen()) {
+        <div class="absolute bottom-full mb-1 left-0 w-48 bg-[#C0C0C0] win95-border p-0.5" (click)="$event.stopPropagation()">
+          <div class="flex h-full">
+            <div class="w-8 bg-[#000080] flex flex-col justify-end overflow-hidden">
+              <img src="https://i.imgur.com/uGzJ42D.png" alt="Windows 98 Start Menu Banner" class="w-full h-auto">
+            </div>
+            <ul class="flex-1">
+              <li class="px-3 py-1 hover:bg-blue-800 hover:text-white cursor-pointer flex items-center" (click)="openWindow('internet-explorer')">
+                <img src="https://win98icons.alexmeub.com/icons/png/msie2-1.png" class="w-6 h-6 mr-2"> Internet Explorer
+              </li>
+               <li class="px-3 py-1 hover:bg-blue-800 hover:text-white cursor-pointer flex items-center" (click)="openWindow('file-explorer')">
+                <img src="https://win98icons.alexmeub.com/icons/png/directory_explorer-1.png" class="w-6 h-6 mr-2"> Windows Explorer
+              </li>
+              <li class="border-t border-gray-500 my-1"></li>
+              <li class="px-3 py-1 hover:bg-blue-800 hover:text-white cursor-pointer flex items-center" (click)="openWindow('audio-player')">
+                <img src="https://win98icons.alexmeub.com/icons/png/windows_media_player-1.png" class="w-6 h-6 mr-2"> Windows Media Player
+              </li>
+              <li class="px-3 py-1 hover:bg-blue-800 hover:text-white cursor-pointer flex items-center" (click)="openWindow('minesweeper')">
+                <img src="https://win98icons.alexmeub.com/icons/png/minesweeper-1.png" class="w-6 h-6 mr-2"> Minesweeper
+              </li>
+              <li class="px-3 py-1 hover:bg-blue-800 hover:text-white cursor-pointer flex items-center" (click)="openWindow('notepad')">
+                <img src="https://win98icons.alexmeub.com/icons/png/notepad-1.png" class="w-6 h-6 mr-2"> Notepad
+              </li>
+              <li class="px-3 py-1 hover:bg-blue-800 hover:text-white cursor-pointer flex items-center" (click)="openWindow('my-computer')">
+                <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-1.png" class="w-6 h-6 mr-2"> My Computer
+              </li>
+            </ul>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Open Window Tabs -->
+    <div class="flex-grow h-full flex items-center ml-2 space-x-1">
+      @for (win of openWindows(); track win.id) {
+        <button 
+          class="h-full max-w-40 truncate px-2 text-left win95-border" 
+          [class.win95-border-sunken]="win.active && !win.minimized" 
+          [class.bg-gray-400]="win.active && !win.minimized"
+          (click)="onTaskbarClick(win.id)">
+            {{ win.title }}
+        </button>
+      }
+    </div>
+
+    <!-- Clock -->
+    <div class="win95-border-sunken px-2 py-0.5 text-right">
+      <span>{{ currentTime() | date:'shortTime' }}</span>
+    </div>
+  </footer>
+</div>

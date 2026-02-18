@@ -1,0 +1,46 @@
+
+<div class="w-full h-full bg-[#C0C0C0] p-1 flex flex-col">
+  <!-- Header -->
+  <div class="win95-border-sunken p-1 flex justify-between items-center mb-1">
+    <div class="bg-black text-red-500 font-mono text-2xl px-1">{{ flagsLeft() | number:'3.0-0' }}</div>
+    <button class="win95-border text-2xl w-8 h-8 flex items-center justify-center" (click)="resetGame()">
+      {{ getFaceEmoji() }}
+    </button>
+    <div class="bg-black text-red-500 font-mono text-2xl px-1">000</div>
+  </div>
+
+  <!-- Game Board -->
+  <div class="win95-border-sunken flex-grow grid grid-cols-9 grid-rows-9">
+    @for(row of board(); track $index; let r = $index) {
+      @for(cell of row; track $index; let c = $index) {
+        <div 
+          class="w-full h-full flex items-center justify-center font-bold text-lg"
+          (click)="onCellClick(r, c)"
+          (contextmenu)="onRightClick($event, r, c)">
+            @if(!cell.isRevealed) {
+              <div class="w-full h-full win95-border bg-[#C0C0C0] flex items-center justify-center">
+                @if (cell.isFlagged) {
+                  <span>🚩</span>
+                }
+              </div>
+            } @else {
+              <div class="w-full h-full border-t border-l border-gray-400">
+                @if(cell.isMine) {
+                  <span class="bg-red-500 block w-full h-full text-center">💣</span>
+                } @else if(cell.adjacentMines > 0) {
+                  <span [class]="getCellColor(cell)">{{ cell.adjacentMines }}</span>
+                }
+              </div>
+            }
+        </div>
+      }
+    }
+  </div>
+
+  @if (gameStatus() === 'won') {
+    <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-3xl font-bold">You Won!</div>
+  }
+  @if (gameStatus() === 'lost') {
+    <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-3xl font-bold">Game Over</div>
+  }
+</div>
